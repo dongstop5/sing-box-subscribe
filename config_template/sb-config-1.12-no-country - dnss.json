@@ -1,43 +1,37 @@
 {
     "log": {
-        "level": "info",
         "disabled": false,
-        "timestamp": false
-    },
-    "experimental": {
-        "clash_api": {
-            "external_controller": "127.0.0.1:9090",
-            "external_ui": "ui"
-        },
-        "cache_file": {
-            "enabled": true,
-            "path": "cache09008.db",
-            "store_fakeip": true,
-            "store_rdrc": true
-        }
+        "level": "error"
     },
     "dns": {
         "servers": [
             {
-                "tag": "dns_proxy",
                 "type": "tls",
+                "tag": "dns_proxy",
                 "detour": "Proxy",
-                "server_port": 853,
-                "server": "1.1.1.1"
+                "server": "1.1.1.1",
+                "server_port": 853
             },
             {
-                "tag": "dns_ali",
+                "type": "tls",
+                "tag": "dns_8888",
+                "detour": "Proxy",
+                "server": "8.8.8.8",
+                "server_port": 853
+            },
+            {
                 "type": "https",
-                "server_port": 443,
-                "server": "223.5.5.5"
+                "tag": "dns_ali",
+                "server": "223.5.5.5",
+                "server_port": 443
             },
             {
-                "tag": "dns_local",
-                "type": "local"
+                "type": "local",
+                "tag": "dns_local"
             },
             {
-                "tag": "dns_fakeip",
                 "type": "fakeip",
+                "tag": "dns_fakeip",
                 "inet4_range": "198.18.0.0/15",
                 "inet6_range": "fc00::/18"
             }
@@ -48,22 +42,31 @@
                 "server": "dns_proxy"
             },
             {
+                "clash_mode": "DNS-ali",
+                "rule_set": "geosite-cn",
+                "server": "dns_local"
+            },
+            {
                 "query_type": [
                     "A",
                     "AAAA"
                 ],
-                "clash_mode": "FakeIP",
-                "rewrite_ttl": 1,
-                "server": "dns_fakeip"
+                "clash_mode": "Fake-IP",
+                "server": "dns_fakeip",
+                "rewrite_ttl": 1
             },
             {
                 "rule_set": "geosite-cn",
                 "server": "dns_local"
+            },
+            {
+                "clash_mode": "DNS-8888",
+                "server": "dns_local"
             }
         ],
         "final": "dns_proxy",
-        "independent_cache": true,
-        "strategy": "ipv4_only"
+        "strategy": "ipv4_only",
+        "independent_cache": true
     },
     "inbounds": [
         {
@@ -289,7 +292,7 @@
             },
             {
                 "rule_set": "geosite-category-ads-all",
-                "clash_mode": "FakeIP",
+                "clash_mode": "Ad-block",
                 "action": "reject"
             },
             {
