@@ -1,7 +1,7 @@
 {
     "log": {
         "level": "error",
-        "disabled": false,
+        "disabled": true,
         "timestamp": false
     },
     "experimental": {
@@ -276,7 +276,16 @@
                 "action": "sniff"
             },
             {
-                "port": 53,
+                "type": "logical",
+                "mode": "or",
+                "rules": [
+                    {
+                        "protocol": "dns"
+                    },
+                    {
+                        "port": 53
+                    }
+                ],
                 "action": "hijack-dns"
             },
             {
