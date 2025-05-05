@@ -44,10 +44,6 @@
         ],
         "rules": [
             {
-                "clash_mode": "Global",
-                "server": "dns_proxy"
-            },
-            {
                 "query_type": [
                     "A",
                     "AAAA"
@@ -124,6 +120,15 @@
             ],
             "url": "https://www.gstatic.com/generate_204",
             "tolerance": 50
+        },
+        {
+            "tag": "Ad-block",
+            "type": "selector",
+            "outbounds": [
+                "DIRECT",
+                "BLOCK",
+                "Proxy"
+            ]
         },
         {
             "tag": "OpenAI",
@@ -252,12 +257,25 @@
             ]
         },
         {
+            "tag": "China",
+            "type": "selector",
+            "outbounds": [
+                "DIRECT",
+                "BLOCK",
+                "Proxy"
+            ]
+        },
+        {
             "tag": "xyz",
             "type": "selector",
             "outbounds": [
                 "DIRECT",
                 "Proxy"
             ]
+        },
+        {
+          "type": "block",
+          "tag": "BLOCK"
         },
         {
             "type": "direct",
@@ -293,13 +311,13 @@
                 "outbound": "DIRECT"
             },
             {
-                "clash_mode": "Global",
-                "outbound": "Proxy"
+              "protocol": "quic",
+              "clash_mode": "OFF-quic",
+              "action": "reject"
             },
             {
                 "rule_set": "geosite-category-ads-all",
-                "clash_mode": "FakeIP",
-                "action": "reject"
+                "outbound": "Ad-block"
             },
             {
                 "rule_set": [],
@@ -404,7 +422,7 @@
             },
             {
                 "rule_set": "geosite-cn",
-                "outbound": "DIRECT"
+                "outbound": "China"
             },
             {
                 "action": "resolve"
