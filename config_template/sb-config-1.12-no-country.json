@@ -1,6 +1,6 @@
 {
     "log": {
-        "level": "error",
+        "level": "info",
         "disabled": false,
         "timestamp": false
     },
@@ -312,7 +312,7 @@
             },
             {
               "protocol": "quic",
-              "clash_mode": "OFF-quic",
+              "clash_mode": "QUIC-off",
               "action": "reject"
             },
             {
