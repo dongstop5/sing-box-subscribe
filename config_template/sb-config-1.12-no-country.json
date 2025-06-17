@@ -19,47 +19,66 @@
     "dns": {
         "servers": [
             {
-                "tag": "dns_proxy",
-                "type": "tls",
-                "detour": "Proxy",
-                "server_port": 853,
-                "server": "1.1.1.1"
-            },
-            {
-                "tag": "dns_ali",
                 "type": "https",
-                "server_port": 443,
-                "server": "223.5.5.5"
+                "tag": "DNS_google",
+                "detour": "Proxy",
+                "domain_resolver": "hosts",
+                "server": "dns.google"
             },
             {
-                "tag": "dns_local",
-                "type": "local"
+                "type": "https",
+                "tag": "DNS_Pod",
+                "domain_resolver": "hosts",
+                "server": "doh.pub"
             },
             {
-                "tag": "dns_fakeip",
+                "type": "local",
+                "tag": "dns_local"
+            },
+            {
                 "type": "fakeip",
+                "tag": "DNS_fakeip",
                 "inet4_range": "198.18.0.0/15",
                 "inet6_range": "fc00::/18"
+            },
+            {
+                "type": "hosts",
+                "tag": "hosts",
+                "predefined": {
+                    "doh.pub": [
+                        "120.53.53.53",
+                        "1.12.12.12",
+                        "1.12.12.21"
+                    ],
+                    "dns.google": [
+                        "8.8.8.8",
+                        "8.8.4.4"
+                    ]
+                }
             }
         ],
         "rules": [
+            {
+                "ip_accept_any": true,
+                "server": "hosts"
+            },
             {
                 "query_type": [
                     "A",
                     "AAAA"
                 ],
                 "clash_mode": "FakeIP",
-                "rewrite_ttl": 1,
-                "server": "dns_fakeip"
+                "server": "DNS_fakeip",
+                "rewrite_ttl": 1
             },
             {
                 "rule_set": "geosite-cn",
-                "server": "dns_local"
+                "server": "DNS_Pod"
             }
         ],
-        "final": "dns_proxy",
-        "independent_cache": true,
-        "strategy": "ipv4_only"
+        "final": "DNS_google",
+        "strategy": "ipv4_only",
+        "independent_cache": true
     },
     "inbounds": [
         {
@@ -274,8 +293,8 @@
             ]
         },
         {
-          "type": "block",
-          "tag": "BLOCK"
+            "type": "block",
+            "tag": "BLOCK"
         },
         {
             "type": "direct",
@@ -283,10 +302,7 @@
         }
     ],
     "route": {
-        "default_domain_resolver": {
-            "server": "dns_local",
-            "client_subnet": "1.1.1.1"
-        },
+        "default_domain_resolver": "DNS_Pod",
         "auto_detect_interface": true,
         "final": "Proxy",
         "rules": [
@@ -311,9 +327,9 @@
                 "outbound": "DIRECT"
             },
             {
-              "protocol": "quic",
-              "clash_mode": "QUIC-off",
-              "action": "reject"
+                "protocol": "quic",
+                "clash_mode": "QUIC-off",
+                "action": "reject"
             },
             {
                 "rule_set": "geosite-category-ads-all",
