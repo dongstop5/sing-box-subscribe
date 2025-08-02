@@ -1,7 +1,7 @@
 {
     "log": {
         "level": "info",
-        "disabled": true,
+        "disabled": false,
         "timestamp": false
     },
     "experimental": {
@@ -341,9 +341,7 @@
                     "oaifree.com",
                     "eu.org",
                     "644566.xyz",
-                    "linux.do",
-                    "tzfile.com",
-                    "pan666.net"
+                    "linux.do"  
                 ],
                 "domain_keyword": [],
                 "ip_cidr": [],
