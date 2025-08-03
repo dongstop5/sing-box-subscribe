@@ -150,6 +150,14 @@
             ]
         },
         {
+            "tag": "xyz",
+            "type": "selector",
+            "outbounds": [
+                "DIRECT",
+                "Proxy"
+            ]
+        },
+        {
             "tag": "OpenAI",
             "type": "selector",
             "outbounds": [
@@ -281,14 +289,6 @@
             "outbounds": [
                 "DIRECT",
                 "BLOCK",
-                "Proxy"
-            ]
-        },
-        {
-            "tag": "xyz",
-            "type": "selector",
-            "outbounds": [
-                "DIRECT",
                 "Proxy"
             ]
         },
