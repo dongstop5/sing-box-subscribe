@@ -1,7 +1,7 @@
 {
     "log": {
         "level": "info",
-        "disabled": false,
+        "disabled": true,
         "timestamp": false
     },
     "experimental": {
@@ -166,6 +166,15 @@
             ]
         },
         {
+            "tag": "Microsoft",
+            "type": "selector",
+            "outbounds": [
+                "Proxy",
+                "DIRECT",
+                "{all}"
+            ]
+        },
+        {
             "tag": "Youtube",
             "type": "selector",
             "outbounds": [
@@ -259,15 +268,6 @@
             ]
         },
         {
-            "tag": "Microsoft",
-            "type": "selector",
-            "outbounds": [
-                "Proxy",
-                "DIRECT",
-                "{all}"
-            ]
-        },
-        {
             "tag": "Games",
             "type": "selector",
             "outbounds": [
@@ -343,7 +343,7 @@
                     "644566.xyz",
                     "tzfile.com",
                     "pan666.net",
-                    "linux.do"  
+                    "linux.do"
                 ],
                 "domain_keyword": [],
                 "ip_cidr": [],
@@ -353,6 +353,10 @@
             {
                 "rule_set": "geosite-openai",
                 "outbound": "OpenAI"
+            },
+            {
+                "rule_set": "geosite-microsoft",
+                "outbound": "Microsoft"
             },
             {
                 "rule_set": "geosite-youtube",
@@ -417,10 +421,6 @@
                     "geosite-amazon"
                 ],
                 "outbound": "Apple"
-            },
-            {
-                "rule_set": "geosite-microsoft",
-                "outbound": "Microsoft"
             },
             {
                 "rule_set": [
