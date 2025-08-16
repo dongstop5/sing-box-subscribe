@@ -26,6 +26,27 @@
                 "server": "dns.google"
             },
             {
+                "type": "h3",
+                "tag": "DNS_cf",
+                "detour": "Proxy",
+                "domain_resolver": "hosts",
+                "server": "cloudflare-dns.com",
+                "server_port": 443,
+                "tls": {
+                    "enabled": true,
+                    "server_name": "cloudflare-dns.com"
+                },
+                "path": "/dns-query",
+                "headers": {
+                    "Host": "cloudflare-dns.com"
+                }
+            },
+            {
+                "type": "tls",
+                "tag": "tls_1111",
+                "server": "1.1.1.1"
+            },
+            {
                 "type": "https",
                 "tag": "DNS_Pod",
                 "domain_resolver": "hosts",
@@ -50,6 +71,10 @@
                         "1.12.12.12",
                         "1.12.12.21"
                     ],
+                    "cloudflare-dns.com": [
+                        "1.1.1.1",
+                        "1.0.0.1"
+                    ],
                     "dns.google": [
                         "8.8.8.8",
                         "8.8.4.4"
@@ -59,14 +84,7 @@
         ],
         "rules": [
             {
-                "ip_accept_any": true,
-                "server": "hosts"
-            },
-            {
-                "query_type": [
-                    "A",
-                    "AAAA"
-                ],
+                "query_type": "A",
                 "clash_mode": "FakeIP",
                 "server": "DNS_fakeip",
                 "rewrite_ttl": 1
@@ -76,7 +94,7 @@
                 "server": "DNS_Pod"
             }
         ],
-        "final": "DNS_google",
+        "final": "DNS_cf",
         "strategy": "ipv4_only",
         "independent_cache": true
     },
