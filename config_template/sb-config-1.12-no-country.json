@@ -25,27 +25,19 @@
                 "domain_resolver": "hosts",
                 "server": "dns.google"
             },
-            {
-                "type": "h3",
-                "tag": "DNS_cf",
-                "detour": "Proxy",
-                "domain_resolver": "hosts",
-                "server": "cloudflare-dns.com",
-                "server_port": 443,
-                "tls": {
-                    "enabled": true,
-                    "server_name": "cloudflare-dns.com"
-                },
-                "path": "/dns-query",
-                "headers": {
-                    "Host": "cloudflare-dns.com"
-                }
-            },
-            {
-                "type": "tls",
-                "tag": "tls_1111",
-                "server": "1.1.1.1"
-            },
+      {
+        "type": "https",
+        "tag": "DNS_cf",
+        "detour": "Proxy",
+        "domain_resolver": "hosts",
+        "server": "cloudflare-dns.com",
+      },
+      {
+        "type": "tls",
+        "tag": "tls_1111",
+        "detour": "Proxy",
+        "server": "1.1.1.1"
+      },
             {
                 "type": "https",
                 "tag": "DNS_Pod",
