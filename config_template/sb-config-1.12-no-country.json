@@ -164,7 +164,8 @@
             "type": "selector",
             "outbounds": [
                 "DIRECT",
-                "Proxy"
+                "Proxy",
+                "{all}"
             ]
         },
         {
@@ -350,6 +351,7 @@
                 "domain_suffix": [
                     "oaifree.com",
                     "eu.org",
+"lmarena.ai",
                     "644566.xyz",
                     "tzfile.com",
                     "pan666.net",
