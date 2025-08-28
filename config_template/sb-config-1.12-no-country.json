@@ -375,6 +375,7 @@
                 "outbound": "Youtube"
             },
             {
+                "domain_suffix": "googleapis.cn",
                 "rule_set": [
                     "geoip-google",
                     "geosite-google",
