@@ -82,6 +82,10 @@
                 "rewrite_ttl": 1
             },
             {
+                "clash_mode": "Direct",
+                "server": "DNS_Pod"
+            },
+            {
                 "rule_set": "geosite-cn",
                 "server": "DNS_Pod"
             }
@@ -338,9 +342,8 @@
                 "outbound": "DIRECT"
             },
             {
-                "protocol": "quic",
-                "clash_mode": "QUIC-off",
-                "action": "reject"
+                "clash_mode": "Direct",
+                "outbound": "DIRECT"
             },
             {
                 "rule_set": "geosite-category-ads-all",
