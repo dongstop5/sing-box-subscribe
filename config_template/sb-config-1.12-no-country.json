@@ -1,7 +1,7 @@
 {
     "log": {
         "level": "info",
-        "disabled": true,
+        "disabled": false,
         "timestamp": false
     },
     "experimental": {
@@ -147,6 +147,7 @@
             "outbounds": [
                 "Proxy",
                 "Auto",
+                "DIRECT",
                 "{all}"
             ],
             "filter": [
