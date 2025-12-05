@@ -94,7 +94,7 @@
                 "server": "DNS_Pod"
             }
         ],
-        "final": "DNS_cf",
+        "final": "DNS_google",
         "strategy": "ipv4_only",
         "independent_cache": true
     },
