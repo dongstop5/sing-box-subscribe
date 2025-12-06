@@ -425,6 +425,7 @@
             {
                 "rule_set": [
                     "geoip-facebook",
+                    "geosite-instagram",
                     "geosite-facebook"
                 ],
                 "outbound": "Facebook"
@@ -555,6 +556,13 @@
                 "type": "remote",
                 "format": "binary",
                 "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/twitter.srs",
+                "download_detour": "Proxy"
+            },
+            {
+                "tag": "geosite-instagram",
+                "type": "remote",
+                "format": "binary",
+                "url": "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geosite/instagram.srs",
                 "download_detour": "Proxy"
             },
             {
