@@ -376,8 +376,9 @@
                 "domain_suffix": [
                     "oaifree.com",
                     "eu.org",
-                    "lmarena.ai",
+"lmarena.ai",
                     "644566.xyz",
+                    "tzfile.com",
                     "pan666.net",
                     "linux.do"
                 ],
@@ -417,8 +418,7 @@
             {
                 "rule_set": [
                     "geoip-twitter",
-                    "geosite-twitter",
-                    "geosite-x"
+                    "geosite-twitter"
                 ],
                 "outbound": "Twitter"
             },
@@ -559,17 +559,10 @@
                 "download_detour": "Proxy"
             },
             {
-                "tag": "geosite-x",
-                "type": "remote",
-                "format": "binary",
-                "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/x.srs",
-                "download_detour": "Proxy"
-            },
-            {
                 "tag": "geosite-instagram",
                 "type": "remote",
                 "format": "binary",
-                "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/instagram.srs",
+                "url": "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geosite/instagram.srs",
                 "download_detour": "Proxy"
             },
             {
