@@ -11,7 +11,7 @@
         },
         "cache_file": {
             "enabled": true,
-            "path": "cache090081.db",
+            "path": "cache09008n1.db",
             "store_fakeip": true,
             "store_rdrc": true
         }
@@ -68,22 +68,34 @@
                         "1.0.0.1"
                     ],
                     "dns.google": [
+                        "8.8.4.4",
                         "8.8.8.8",
-                        "8.8.4.4"
+                        "2001:4860:4860::8844",
+                        "2001:4860:4860::8888"
                     ]
                 }
             }
         ],
         "rules": [
             {
-                "query_type": "A",
-                "clash_mode": "FakeIP",
-                "server": "DNS_fakeip",
-                "rewrite_ttl": 1
+                "ip_accept_any": true,
+                "server": "hosts"
             },
             {
                 "clash_mode": "Direct",
                 "server": "DNS_Pod"
+            },
+            {
+                "clash_mode": "Global",
+                "server": "DNS_google"
+            },
+            {
+                "query_type": [
+                    "A",
+                    "AAAA"
+                ],
+                "server": "DNS_fakeip",
+                "rewrite_ttl": 1
             },
             {
                 "rule_set": "geosite-facebook",
@@ -98,14 +110,24 @@
         "strategy": "ipv4_only",
         "independent_cache": true
     },
-    "inbounds": [
+  "ntp": {
+    "enabled": true,
+    "interval": "30m0s",
+    "server": "time.apple.com",
+    "server_port": 123
+  },
+  "inbounds": [
         {
             "tag": "tun-in",
             "type": "tun",
             "address": [
-                "172.19.0.0/30"
+                "172.18.0.1/30"
             ],
             "route_exclude_address_set": "geoip-cn",
+            "route_exclude_address": [
+                "192.168.0.0/16",
+                "fc00::/7"
+            ],
             "stack": "mixed",
             "auto_route": true,
             "strict_route": true,
@@ -180,8 +202,8 @@
             "tag": "Ad-block",
             "type": "selector",
             "outbounds": [
-                "DIRECT",
                 "BLOCK",
+                "DIRECT",
                 "Proxy"
             ]
         },
@@ -191,6 +213,15 @@
             "outbounds": [
                 "DIRECT",
                 "Proxy",
+                "{all}"
+            ]
+        },
+        {
+            "tag": "Telegram",
+            "type": "selector",
+            "outbounds": [
+                "Proxy",
+                "Auto",
                 "{all}"
             ]
         },
@@ -222,15 +253,6 @@
         },
         {
             "tag": "Google",
-            "type": "selector",
-            "outbounds": [
-                "Proxy",
-                "Auto",
-                "{all}"
-            ]
-        },
-        {
-            "tag": "Telegram",
             "type": "selector",
             "outbounds": [
                 "Proxy",
@@ -368,6 +390,10 @@
                 "outbound": "DIRECT"
             },
             {
+                "clash_mode": "Global",
+                "outbound": "Proxy"
+            },
+            {
                 "rule_set": "geosite-category-ads-all",
                 "outbound": "Ad-block"
             },
@@ -376,7 +402,7 @@
                 "domain_suffix": [
                     "oaifree.com",
                     "eu.org",
-"lmarena.ai",
+                    "lmarena.ai",
                     "644566.xyz",
                     "tzfile.com",
                     "pan666.net",
@@ -418,7 +444,8 @@
             {
                 "rule_set": [
                     "geoip-twitter",
-                    "geosite-twitter"
+                    "geosite-twitter",
+                    "geosite-x"
                 ],
                 "outbound": "Twitter"
             },
@@ -476,7 +503,10 @@
                 "outbound": "Streaming"
             },
             {
-                "rule_set": "geosite-cn",
+                "rule_set": [
+                    "geosite-cn",
+                    "geoip-cn"
+                ],
                 "outbound": "China"
             },
             {
@@ -559,10 +589,17 @@
                 "download_detour": "Proxy"
             },
             {
+                "tag": "geosite-x",
+                "type": "remote",
+                "format": "binary",
+                "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/x.srs",
+                "download_detour": "Proxy"
+            },
+            {
                 "tag": "geosite-instagram",
                 "type": "remote",
                 "format": "binary",
-                "url": "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geosite/instagram.srs",
+                "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/instagram.srs",
                 "download_detour": "Proxy"
             },
             {
