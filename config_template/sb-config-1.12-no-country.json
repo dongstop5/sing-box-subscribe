@@ -199,15 +199,6 @@
             "tolerance": 50
         },
         {
-            "tag": "Ad-block",
-            "type": "selector",
-            "outbounds": [
-                "BLOCK",
-                "DIRECT",
-                "Proxy"
-            ]
-        },
-        {
             "tag": "xyz",
             "type": "selector",
             "outbounds": [
@@ -218,6 +209,15 @@
         },
         {
             "tag": "Telegram",
+            "type": "selector",
+            "outbounds": [
+                "Proxy",
+                "Auto",
+                "{all}"
+            ]
+        },
+        {
+            "tag": "Youtube",
             "type": "selector",
             "outbounds": [
                 "Proxy",
@@ -239,15 +239,6 @@
             "outbounds": [
                 "Proxy",
                 "DIRECT",
-                "{all}"
-            ]
-        },
-        {
-            "tag": "Youtube",
-            "type": "selector",
-            "outbounds": [
-                "Proxy",
-                "Auto",
                 "{all}"
             ]
         },
@@ -352,6 +343,15 @@
             ]
         },
         {
+            "tag": "Ad-block",
+            "type": "selector",
+            "outbounds": [
+                "BLOCK",
+                "DIRECT",
+                "Proxy"
+            ]
+        },
+        {
             "type": "block",
             "tag": "BLOCK"
         },
@@ -418,7 +418,11 @@
                 "outbound": "OpenAI"
             },
             {
-                "rule_set": "geosite-microsoft",
+                "rule_set": [
+                    "geosite-microsoft",
+                    "geosite-github"
+
+                ],
                 "outbound": "Microsoft"
             },
             {
@@ -429,8 +433,7 @@
                 "domain_suffix": "googleapis.cn",
                 "rule_set": [
                     "geoip-google",
-                    "geosite-google",
-                    "geosite-github"
+                    "geosite-google"
                 ],
                 "outbound": "Google"
             },
