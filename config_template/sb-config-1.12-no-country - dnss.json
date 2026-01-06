@@ -2,7 +2,7 @@
     "log": {
         "level": "info",
         "disabled": false,
-        "timestamp": false
+        "timestamp": true
     },
     "experimental": {
         "clash_api": {
@@ -11,7 +11,7 @@
         },
         "cache_file": {
             "enabled": true,
-            "path": "cache090011.db",
+            "path": "cache09008n1.db",
             "store_fakeip": true,
             "store_rdrc": true
         }
@@ -19,24 +19,30 @@
     "dns": {
         "servers": [
             {
-                "type": "tls",
-                "tag": "dns_proxy",
+                "type": "https",
+                "tag": "DNS_google",
                 "detour": "Proxy",
-                "server": "1.1.1.1",
-                "server_port": 853
-            },
-            {
-                "type": "tls",
-                "tag": "dns_8888",
-                "detour": "Proxy",
-                "server": "8.8.8.8",
-                "server_port": 853
+                "domain_resolver": "hosts",
+                "server": "dns.google"
             },
             {
                 "type": "https",
-                "tag": "dns_ali",
-                "server": "223.5.5.5",
-                "server_port": 443
+                "tag": "DNS_cf",
+                "detour": "Proxy",
+                "domain_resolver": "hosts",
+                "server": "cloudflare-dns.com"
+            },
+            {
+                "type": "tls",
+                "tag": "tls_1111",
+                "detour": "Proxy",
+                "server": "1.1.1.1"
+            },
+            {
+                "type": "https",
+                "tag": "DNS_Pod",
+                "domain_resolver": "hosts",
+                "server": "doh.pub"
             },
             {
                 "type": "local",
@@ -44,75 +50,105 @@
             },
             {
                 "type": "fakeip",
-                "tag": "dns_fakeip",
+                "tag": "DNS_fakeip",
                 "inet4_range": "198.18.0.0/15",
                 "inet6_range": "fc00::/18"
+            },
+            {
+                "type": "hosts",
+                "tag": "hosts",
+                "predefined": {
+                    "doh.pub": [
+                        "120.53.53.53",
+                        "1.12.12.12",
+                        "1.12.12.21"
+                    ],
+                    "cloudflare-dns.com": [
+                        "1.1.1.1",
+                        "1.0.0.1"
+                    ],
+                    "dns.google": [
+                        "8.8.4.4",
+                        "8.8.8.8",
+                        "2001:4860:4860::8844",
+                        "2001:4860:4860::8888"
+                    ]
+                }
             }
         ],
         "rules": [
             {
-                "clash_mode": "Global",
-                "server": "dns_proxy"
+                "ip_accept_any": true,
+                "server": "hosts"
             },
             {
-                "clash_mode": "DNS-ali",
-                "rule_set": "geosite-cn",
-                "server": "dns_local"
+                "clash_mode": "Direct",
+                "server": "DNS_Pod"
+            },
+            {
+                "clash_mode": "Global",
+                "server": "DNS_google"
             },
             {
                 "query_type": [
                     "A",
                     "AAAA"
                 ],
-                "clash_mode": "Fake-IP",
-                "server": "dns_fakeip",
+                "server": "DNS_fakeip",
                 "rewrite_ttl": 1
             },
             {
-                "rule_set": "geosite-cn",
-                "server": "dns_local"
+                "rule_set": "geosite-facebook",
+                "server": "tls_1111"
             },
             {
-                "clash_mode": "DNS-8888",
-                "server": "dns_local"
+                "rule_set": "geosite-cn",
+                "server": "DNS_Pod"
             }
         ],
-        "final": "dns_proxy",
+        "final": "DNS_google",
         "strategy": "ipv4_only",
         "independent_cache": true
     },
-    "inbounds": [
-        {
-            "tag": "tun-in",
-            "type": "tun",
-            "address": [
-                "172.19.0.0/30"
-            ],
-            "route_exclude_address_set": "geoip-cn",
-            "stack": "mixed",
-            "auto_route": true,
-            "strict_route": true,
-            "platform": {
-                "http_proxy": {
-                    "enabled": true,
-                    "server": "127.0.0.1",
-                    "server_port": 7890
-                }
-            }
-        },
-        {
-            "tag": "mixed-in",
-            "type": "mixed",
-            "listen": "0.0.0.0",
-            "listen_port": 7890
-        }
-    ],
-    "outbounds": [
+  "ntp": {
+    "enabled": true,
+    "interval": "30m0s",
+    "server": "time.apple.com",
+    "server_port": 123
+  },
+  "inbounds": [
+    {
+      "type": "mixed",
+      "tag": "mixed-in",
+      "listen": "0.0.0.0",
+      "set_system_proxy": true,
+      "listen_port": 8888
+    },
+  ],
+  "outbounds": [
         {
             "tag": "Proxy",
             "type": "selector",
             "outbounds": [
                 "Auto",
+                "{all}"
+            ],
+            "filter": [
+                {
+                    "action": "exclude",
+                    "keywords": [
+                        "网站|地址|剩余|过期|时间|有效|官网|到期|套餐|失联|网址|备用"
+                    ]
+                }
+            ]
+        },
+        {
+            "tag": "Fish",
+            "type": "selector",
+            "outbounds": [
+                "Proxy",
+                "Auto",
+                "DIRECT",
                 "{all}"
             ],
             "filter": [
@@ -138,14 +174,24 @@
                     ]
                 }
             ],
-            "url": "https://www.gstatic.com/generate_204",
+            "url": "http://www.gstatic.com/generate_204",
             "tolerance": 50
         },
         {
-            "tag": "OpenAI",
+            "tag": "xyz",
+            "type": "selector",
+            "outbounds": [
+                "DIRECT",
+                "Proxy",
+                "{all}"
+            ]
+        },
+        {
+            "tag": "Telegram",
             "type": "selector",
             "outbounds": [
                 "Proxy",
+                "Auto",
                 "{all}"
             ]
         },
@@ -159,16 +205,24 @@
             ]
         },
         {
-            "tag": "Google",
+            "tag": "OpenAI",
             "type": "selector",
             "outbounds": [
                 "Proxy",
-                "Auto",
                 "{all}"
             ]
         },
         {
-            "tag": "Telegram",
+            "tag": "Microsoft",
+            "type": "selector",
+            "outbounds": [
+                "Proxy",
+                "DIRECT",
+                "{all}"
+            ]
+        },
+        {
+            "tag": "Google",
             "type": "selector",
             "outbounds": [
                 "Proxy",
@@ -243,15 +297,6 @@
             ]
         },
         {
-            "tag": "Microsoft",
-            "type": "selector",
-            "outbounds": [
-                "Proxy",
-                "DIRECT",
-                "{all}"
-            ]
-        },
-        {
             "tag": "Games",
             "type": "selector",
             "outbounds": [
@@ -268,12 +313,26 @@
             ]
         },
         {
-            "tag": "xyz",
+            "tag": "China",
             "type": "selector",
             "outbounds": [
                 "DIRECT",
+                "BLOCK",
                 "Proxy"
             ]
+        },
+        {
+            "tag": "Ad-block",
+            "type": "selector",
+            "outbounds": [
+                "BLOCK",
+                "DIRECT",
+                "Proxy"
+            ]
+        },
+        {
+            "type": "block",
+            "tag": "BLOCK"
         },
         {
             "type": "direct",
@@ -281,22 +340,32 @@
         }
     ],
     "route": {
-        "default_domain_resolver": {
-            "server": "dns_local",
-            "client_subnet": "1.1.1.1"
-        },
+        "default_domain_resolver": "DNS_Pod",
         "auto_detect_interface": true,
-        "final": "Proxy",
+        "final": "Fish",
         "rules": [
             {
                 "action": "sniff"
             },
             {
-                "port": 53,
+                "type": "logical",
+                "mode": "or",
+                "rules": [
+                    {
+                        "protocol": "dns"
+                    },
+                    {
+                        "port": 53
+                    }
+                ],
                 "action": "hijack-dns"
             },
             {
                 "ip_is_private": true,
+                "outbound": "DIRECT"
+            },
+            {
+                "clash_mode": "Direct",
                 "outbound": "DIRECT"
             },
             {
@@ -305,18 +374,18 @@
             },
             {
                 "rule_set": "geosite-category-ads-all",
-                "clash_mode": "Ad-block",
-                "action": "reject"
+                "outbound": "Ad-block"
             },
             {
                 "rule_set": [],
                 "domain_suffix": [
                     "oaifree.com",
                     "eu.org",
+                    "lmarena.ai",
                     "644566.xyz",
-                    "linux.do",
                     "tzfile.com",
-                    "pan666.net"
+                    "pan666.net",
+                    "linux.do"
                 ],
                 "domain_keyword": [],
                 "ip_cidr": [],
@@ -328,14 +397,22 @@
                 "outbound": "OpenAI"
             },
             {
+                "rule_set": [
+                    "geosite-microsoft",
+                    "geosite-github"
+
+                ],
+                "outbound": "Microsoft"
+            },
+            {
                 "rule_set": "geosite-youtube",
                 "outbound": "Youtube"
             },
             {
+                "domain_suffix": "googleapis.cn",
                 "rule_set": [
                     "geoip-google",
-                    "geosite-google",
-                    "geosite-github"
+                    "geosite-google"
                 ],
                 "outbound": "Google"
             },
@@ -349,13 +426,15 @@
             {
                 "rule_set": [
                     "geoip-twitter",
-                    "geosite-twitter"
+                    "geosite-twitter",
+                    "geosite-x"
                 ],
                 "outbound": "Twitter"
             },
             {
                 "rule_set": [
                     "geoip-facebook",
+                    "geosite-instagram",
                     "geosite-facebook"
                 ],
                 "outbound": "Facebook"
@@ -392,10 +471,6 @@
                 "outbound": "Apple"
             },
             {
-                "rule_set": "geosite-microsoft",
-                "outbound": "Microsoft"
-            },
-            {
                 "rule_set": [
                     "geosite-category-games",
                     "geosite-dmm"
@@ -411,10 +486,10 @@
             },
             {
                 "rule_set": [
-                    "geoip-cn",
-                    "geosite-cn"
+                    "geosite-cn",
+                    "geoip-cn"
                 ],
-                "outbound": "DIRECT"
+                "outbound": "China"
             },
             {
                 "action": "resolve"
@@ -493,6 +568,20 @@
                 "type": "remote",
                 "format": "binary",
                 "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/twitter.srs",
+                "download_detour": "Proxy"
+            },
+            {
+                "tag": "geosite-x",
+                "type": "remote",
+                "format": "binary",
+                "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/x.srs",
+                "download_detour": "Proxy"
+            },
+            {
+                "tag": "geosite-instagram",
+                "type": "remote",
+                "format": "binary",
+                "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/instagram.srs",
                 "download_detour": "Proxy"
             },
             {
