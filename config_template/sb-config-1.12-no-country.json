@@ -110,13 +110,13 @@
         "strategy": "ipv4_only",
         "independent_cache": true
     },
-  "ntp": {
-    "enabled": true,
-    "interval": "30m0s",
-    "server": "time.apple.com",
-    "server_port": 123
-  },
-  "inbounds": [
+    "ntp": {
+        "enabled": true,
+        "interval": "30m0s",
+        "server": "time.apple.com",
+        "server_port": 123
+    },
+    "inbounds": [
         {
             "tag": "tun-in",
             "type": "tun",
@@ -164,7 +164,7 @@
             ]
         },
         {
-            "tag": "Fish",
+            "tag": "Final",
             "type": "selector",
             "outbounds": [
                 "Proxy",
@@ -363,8 +363,16 @@
     "route": {
         "default_domain_resolver": "DNS_Pod",
         "auto_detect_interface": true,
-        "final": "Fish",
+        "final": "Final",
         "rules": [
+            {
+                "clash_mode": "Direct",
+                "outbound": "DIRECT"
+            },
+            {
+                "clash_mode": "Global",
+                "outbound": "Proxy"
+            },
             {
                 "action": "sniff"
             },
@@ -382,16 +390,17 @@
                 "action": "hijack-dns"
             },
             {
+                "network": "udp",
+                "protocol": "quic",
+                "action": "reject"
+            },
+            {
+                "network": "icmp",
+                "outbound": "DIRECT"
+            },
+            {
                 "ip_is_private": true,
                 "outbound": "DIRECT"
-            },
-            {
-                "clash_mode": "Direct",
-                "outbound": "DIRECT"
-            },
-            {
-                "clash_mode": "Global",
-                "outbound": "Proxy"
             },
             {
                 "rule_set": "geosite-category-ads-all",
@@ -400,13 +409,11 @@
             {
                 "rule_set": [],
                 "domain_suffix": [
-                    "oaifree.com",
                     "eu.org",
                     "lmarena.ai",
                     "644566.xyz",
                     "tzfile.com",
-                    "pan666.net",
-                    "linux.do"
+                    "pan666.net"
                 ],
                 "domain_keyword": [],
                 "ip_cidr": [],
@@ -421,7 +428,6 @@
                 "rule_set": [
                     "geosite-microsoft",
                     "geosite-github"
-
                 ],
                 "outbound": "Microsoft"
             },
