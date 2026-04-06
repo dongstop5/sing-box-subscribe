@@ -538,7 +538,7 @@
                 "tag": "geosite-openai",
                 "type": "remote",
                 "format": "binary",
-                "url": "https://raw.githubusercontent.com/lyc8503/sing-box-rules/refs/heads/rule-set-geosite/geosite-openai.srs",
+                "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/openai.srs",
                 "download_detour": "Proxy"
             },
             {
