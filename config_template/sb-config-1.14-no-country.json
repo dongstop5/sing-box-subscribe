@@ -3,6 +3,17 @@
     "level": "info",
     "timestamp": true
   },
+  "experimental": {
+    "cache_file": {
+      "enabled": true,
+      "path": "cache09008nk1.db",
+      "store_fakeip": true
+    },
+    "clash_api": {
+      "external_controller": "127.0.0.1:9090",
+      "external_ui": "ui"
+    }
+  },
   "dns": {
     "servers": [
       {
