@@ -139,6 +139,7 @@
     ],
     "final": "DNS_google",
     "reverse_mapping": true,
+    "strategy": "ipv4_only",
     "cache_capacity": 8000,
     "optimistic": {
       "enabled": true,
