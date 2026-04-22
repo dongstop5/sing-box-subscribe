@@ -93,6 +93,15 @@
         "server": "DNS_Pod"
       },
       {
+        "action": "evaluate",
+        "server": "DNS_Pod"
+      },
+      {
+        "rule_set": "geoip-cn",
+        "match_response": true,
+        "server": "DNS_Pod"
+      },
+      {
         "query_type": [
           "A",
           "AAAA"
@@ -102,6 +111,7 @@
       }
     ],
     "final": "DNS_google",
+    "strategy": "ipv4_only",
     "reverse_mapping": true,
     "cache_capacity": 8000,
     "optimistic": {
