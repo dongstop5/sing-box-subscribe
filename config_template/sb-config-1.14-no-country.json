@@ -77,12 +77,12 @@
           "SVCB",
           "HTTPS"
         ],
-        "action": "predefined"
+        "action": "reject"
       },
       {
         "rule_set": "geosite-category-ads-all",
-        "action": "predefined",
-        "rcode": "NXDOMAIN"
+        "action": "reject"
+        
       },
       {
         "rule_set": "geosite-facebook",
