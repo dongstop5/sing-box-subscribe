@@ -747,6 +747,15 @@
     "auto_detect_interface": true,
     "default_domain_resolver": "DNS_Pod"
   },
+"services": [
+    {
+      "type": "api",
+      "tag": "sing-box-api",
+      "listen": "0.0.0.0",
+      "listen_port": 9999,
+      "access_control_allow_private_network": true
+    }
+  ],
   "experimental": {
     "cache_file": {
       "enabled": true,
